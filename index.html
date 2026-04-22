@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fature na Internet — Curso Marketing Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00ff88;
+    --red: #ff2d2d;
+    --red2: #ff1a1a;
+    --bg: #080808;
+    --surface: #101010;
+    --surface2: #161616;
+    --text: #f0f0f0;
+    --muted: #666;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    position: relative;
+    padding: 60px 24px 80px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,255,136,0.10) 0%, rgba(255,45,45,0.06) 50%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+    animation: breathe 4s ease-in-out infinite;
+  }
+
+  /* animated diagonal gradient stripe */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      transparent 0%,
+      rgba(255,45,45,0.04) 30%,
+      rgba(0,255,136,0.04) 60%,
+      transparent 100%
+    );
+    background-size: 200% 200%;
+    animation: gradShift 6s ease infinite;
+    pointer-events: none;
+  }
+
+  @keyframes gradShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes breathe {
+    0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 0.8; }
+    50% { transform: translate(-50%,-50%) scale(1.12); opacity: 1; }
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255,45,45,0.45);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    background: rgba(255,45,45,0.10);
+    backdrop-filter: blur(10px);
+    animation: fadeDown 0.6s ease both;
+    box-shadow: 0 0 14px rgba(255,45,45,0.2);
+  }
+
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    animation: blink 1.2s ease infinite;
+    box-shadow: 0 0 6px var(--red);
+  }
+
+  @keyframes blink {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 10vw, 120px);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    margin-bottom: 24px;
+    animation: fadeUp 0.7s 0.15s ease both;
+  }
+
+  .hero h1 .line-green { color: var(--green); display: block; }
+  .hero h1 .line-white { color: #fff; display: block; }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: #aaa;
+    max-width: 540px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+    font-weight: 300;
+    animation: fadeUp 0.7s 0.25s ease both;
+  }
+
+  /* ── TIMER ── */
+  .timer-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,26,26,0.12);
+    border: 1px solid rgba(255,26,26,0.5);
+    padding: 12px 24px;
+    border-radius: 10px;
+    margin-bottom: 36px;
+    animation: fadeUp 0.7s 0.35s ease both, timerPulse 2s ease-in-out infinite;
+    box-shadow: 0 0 24px rgba(255,26,26,0.25), inset 0 0 20px rgba(255,26,26,0.05);
+  }
+
+  @keyframes timerPulse {
+    0%,100% { box-shadow: 0 0 24px rgba(255,26,26,0.25), inset 0 0 20px rgba(255,26,26,0.05); }
+    50%      { box-shadow: 0 0 40px rgba(255,26,26,0.50), inset 0 0 20px rgba(255,26,26,0.10); }
+  }
+
+  .timer-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  .timer-digits {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: #fff;
+    letter-spacing: 0.04em;
+    min-width: 80px;
+    text-shadow: 0 0 12px rgba(255,45,45,0.6);
+  }
+
+  /* ── CTA BUTTON ── */
+  .cta-wrap {
+    animation: fadeUp 0.7s 0.45s ease both;
+  }
+
+  .btn-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(90deg, #00ff88 0%, #00e87a 100%);
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 18px 40px;
+    border-radius: 6px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 20px rgba(0,255,136,0.35), 0 0 40px rgba(255,26,26,0.15);
+    animation: btnGlow 2.5s ease-in-out infinite;
+  }
+
+  @keyframes btnGlow {
+    0%,100% { box-shadow: 0 0 20px rgba(0,255,136,0.4), 0 0 40px rgba(255,26,26,0.15); }
+    50%      { box-shadow: 0 0 36px rgba(0,255,136,0.65), 0 0 60px rgba(255,26,26,0.30); }
+  }
+
+  .btn-cta::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--red), var(--green), var(--red));
+    background-size: 200%;
+    animation: borderFlow 2s linear infinite;
+  }
+
+  @keyframes borderFlow {
+    0%   { background-position: 0%; }
+    100% { background-position: 200%; }
+  }
+
+  .btn-cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.18);
+    transform: translateX(-100%) skewX(-15deg);
+    transition: transform 0.4s ease;
+  }
+
+  .btn-cta:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 16px 50px rgba(0,255,136,0.55), 0 8px 30px rgba(255,26,26,0.35); }
+  .btn-cta:hover::after { transform: translateX(120%) skewX(-15deg); }
+
+  .btn-arrow { font-size: 20px; }
+
+  .btn-note {
+    display: block;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* ── SOCIAL PROOF BAR ── */
+  .proof-bar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    padding: 40px 24px;
+    border-top: 1px solid rgba(255,26,26,0.25);
+    border-bottom: 1px solid rgba(255,26,26,0.25);
+    background: var(--surface);
+    box-shadow: 0 -1px 30px rgba(255,26,26,0.06), 0 1px 30px rgba(255,26,26,0.06);
+  }
+
+  .proof-item {
+    text-align: center;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .proof-item.visible { opacity: 1; transform: translateY(0); }
+
+  .proof-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--green);
+    line-height: 1;
+  }
+
+  .proof-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* ── SECTION ── */
+  section { padding: 90px 24px; }
+
+  .section-tag {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 5vw, 60px);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .section-sub {
+    color: #888;
+    font-size: 16px;
+    max-width: 500px;
+    line-height: 1.65;
+    margin-bottom: 56px;
+  }
+
+  /* ── LEARN GRID ── */
+  .learn-section { background: var(--surface); }
+
+  .learn-section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .learn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px;
+    border: 2px solid rgba(255,26,26,0.2);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(255,26,26,0.08);
+  }
+
+  .learn-card {
+    background: var(--surface2);
+    padding: 36px 28px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.25s, box-shadow 0.25s;
+  }
+
+  .learn-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, var(--red), var(--green));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .learn-card:hover { background: #1c1010; box-shadow: inset 0 0 30px rgba(255,26,26,0.06); }
+  .learn-card:hover::before { transform: scaleX(1); }
+
+  .learn-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+
+  .learn-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .learn-card p {
+    font-size: 14px;
+    color: #777;
+    line-height: 1.6;
+  }
+
+  /* ── MENTORIA ── */
+  .mentoria-section { background: var(--bg); }
+
+  .mentoria-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  @media (max-width: 700px) {
+    .mentoria-inner { grid-template-columns: 1fr; gap: 36px; }
+  }
+
+  .mentoria-visual {
+    background: var(--surface2);
+    border: 1px solid rgba(255,26,26,0.30);
+    border-radius: 16px;
+    padding: 48px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(255,26,26,0.10), 0 0 80px rgba(255,26,26,0.05);
+  }
+
+  .mentoria-visual::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(255,26,26,0.18), transparent 70%);
+  }
+
+  .mentoria-icon { font-size: 64px; margin-bottom: 16px; }
+  .mentoria-visual h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .mentoria-visual p { color: #777; font-size: 14px; line-height: 1.6; }
+
+  .mentoria-list { list-style: none; }
+
+  .mentoria-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 15px;
+    color: #ccc;
+    line-height: 1.5;
+  }
+
+  .mentoria-list li:last-child { border-bottom: none; }
+
+  .check {
+    color: var(--green);
+    font-size: 17px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-section {
+    background: var(--surface);
+  }
+
+  .testimonials-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    text-align: left;
+  }
+
+  .testi-card {
+    background: var(--bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 28px 24px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s, transform 0.5s, border-color 0.25s, box-shadow 0.25s;
+  }
+
+  .testi-card.visible { opacity: 1; transform: translateY(0); }
+  .testi-card:hover { border-color: rgba(255,26,26,0.35); transform: translateY(-3px) !important; box-shadow: 0 8px 30px rgba(255,26,26,0.12); }
+
+  .stars { color: var(--green); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+
+  .testi-text {
+    font-size: 15px;
+    line-height: 1.65;
+    color: #ccc;
+    margin-bottom: 20px;
+  }
+
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+
+  .testi-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--green), #00b35a);
+    display: grid;
+    place-items: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  .testi-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .testi-role { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* ── FINAL CTA ── */
+  .final-cta {
+    background: var(--bg);
+    text-align: center;
+    padding: 100px 24px;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgba(255,26,26,0.2);
+  }
+
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    bottom: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 400px;
+    background: radial-gradient(ellipse at 40%, rgba(255,26,26,0.08), transparent 55%),
+                radial-gradient(ellipse at 60%, rgba(0,255,136,0.07), transparent 55%);
+    pointer-events: none;
+    animation: dualGlow 5s ease-in-out infinite alternate;
+  }
+
+  @keyframes dualGlow {
+    0%   { opacity: 0.7; transform: translateX(-50%) scaleX(1); }
+    100% { opacity: 1;   transform: translateX(-50%) scaleX(1.15); }
+  }
+
+  .price-block {
+    margin: 32px 0 40px;
+  }
+
+  .price-from {
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: line-through;
+    margin-bottom: 4px;
+  }
+
+  .price-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 110px);
+    color: var(--green);
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(0,255,136,0.5), 0 0 80px rgba(0,255,136,0.2);
+    letter-spacing: 0.02em;
+  }
+
+  .price-note { font-size: 14px; color: #888; margin-top: 6px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--surface);
+    text-align: center;
+    padding: 28px 24px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid rgba(255,26,26,0.2);
+  }
+
+  /* ── KEYFRAMES ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+
+  <div>
+    <div class="badge">✦ Vagas Limitadas</div>
+
+    <h1>
+      <span class="line-white">FATURE NA</span>
+      <span class="line-green">INTERNET</span>
+      <span class="line-white">EM 60 DIAS</span>
+    </h1>
+
+    <p class="hero-sub">
+      Do zero à primeira venda — método validado por mais de 2.400 alunos que
+      já transformaram horas livres em renda real.
+    </p>
+
+    <div class="timer-wrap">
+      <span class="timer-label">⏳ Oferta expira em</span>
+      <span class="timer-digits" id="timer">05:00</span>
+    </div>
+
+    <div class="cta-wrap">
+      <a href="https://pay.kiwify.com.br/1FHODQ2" class="btn-cta">
+        Quero Começar Agora <span class="btn-arrow">→</span>
+      </a>
+      <span class="btn-note">🔒 Pagamento 100% seguro · Acesso imediato</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROOF BAR ══ -->
+<div class="proof-bar">
+  <div class="proof-item">
+    <div class="proof-num">2.400+</div>
+    <div class="proof-desc">Alunos ativos</div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-num">R$3K</div>
+    <div class="proof-desc">Média mensal dos alunos</div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-num">15 dias</div>
+    <div class="proof-desc">Até a 1ª venda (mediana)</div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-num">4.9★</div>
+    <div class="proof-desc">Avaliação média</div>
+  </div>
+</div>
+
+<!-- ══ O QUE VOCÊ VAI APRENDER ══ -->
+<section class="learn-section">
+  <div class="learn-section-inner">
+    <div class="section-tag reveal">Conteúdo</div>
+    <h2 class="section-title reveal">O que você vai aprender</h2>
+    <p class="section-sub reveal" style="margin: 0 auto 56px;">
+      Um currículo direto ao ponto, construído para gerar resultado rápido — sem enrolação.
+    </p>
+
+    <div class="learn-grid">
+      <div class="learn-card reveal">
+        <div class="learn-icon">📣</div>
+        <h3>Tráfego Pago</h3>
+        <p>Meta Ads e Google Ads do zero. Aprenda a investir R$10 e transformar em R$50.</p>
+      </div>
+      <div class="learn-card reveal">
+        <div class="learn-icon">🎯</div>
+        <h3>Ofertas que Vendem</h3>
+        <p>Como criar uma oferta irresistível e escolher produtos que o mercado já quer comprar.</p>
+      </div>
+      <div class="learn-card reveal">
+        <div class="learn-icon">💰</div>
+        <h3>Ganhar Dinheiro Online</h3>
+        <p>Estratégias reais de afiliado e infoproduto para gerar renda todos os dias.</p>
+      </div>
+      <div class="learn-card reveal">
+        <div class="learn-icon">🚀</div>
+        <h3>Escalar Ganhos</h3>
+        <p>Como ir de R$1K para R$10K por mês reinvestindo de forma inteligente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MENTORIA ══ -->
+<section class="mentoria-section">
+  <div class="mentoria-inner">
+    <div class="mentoria-visual reveal">
+      <div class="mentoria-icon">🧭</div>
+      <h3>Mentoria Inclusa</h3>
+      <p>Não vai ficar sozinho. Acesse suporte direto para tirar dúvidas e acelerar resultados.</p>
+    </div>
+
+    <div class="reveal">
+      <div class="section-tag">Suporte Completo</div>
+      <h2 class="section-title">Você não caminha sozinho</h2>
+      <ul class="mentoria-list">
+        <li><span class="check">✓</span> Grupo exclusivo no WhatsApp com suporte diário</li>
+        <li><span class="check">✓</span> Lives semanais de acompanhamento ao vivo</li>
+        <li><span class="check">✓</span> Análise personalizada das suas campanhas</li>
+        <li><span class="check">✓</span> Comunidade de alunos para trocar experiências</li>
+        <li><span class="check">✓</span> Atualizações gratuitas por 12 meses</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DEPOIMENTOS ══ -->
+<section class="testimonials-section">
+  <div class="testimonials-inner">
+    <div class="section-tag reveal">Resultados</div>
+    <h2 class="section-title reveal">O que os alunos dizem</h2>
+    <p class="section-sub reveal" style="margin: 0 auto 48px;">Pessoas reais, resultados reais.</p>
+
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Fiz minha primeira venda em menos de 15 dias. Nunca tinha anunciado antes e o passo a passo foi muito claro."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">JO</div>
+          <div>
+            <div class="testi-name">João Oliveira</div>
+            <div class="testi-role">Afiliado — São Paulo, SP</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Hoje tiro mais de R$3 mil por mês trabalhando pelo celular. O curso mudou completamente minha relação com dinheiro."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">MA</div>
+          <div>
+            <div class="testi-name">Mariana Alves</div>
+            <div class="testi-role">Infoprodutora — Belo Horizonte, MG</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Mudou minha vida completamente. Em 3 meses saí do emprego CLT e hoje tenho minha própria liberdade financeira."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">LF</div>
+          <div>
+            <div class="testi-name">Lucas Ferreira</div>
+            <div class="testi-role">Marketing Digital — Curitiba, PR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FINAL CTA ══ -->
+<section class="final-cta">
+  <div class="section-tag reveal">Última Chance</div>
+  <h2 class="section-title reveal">Garanta sua vaga agora</h2>
+  <p class="hero-sub reveal" style="margin: 0 auto 0;">
+    Cada dia sem agir é um dia a menos para conquistar sua liberdade financeira.
+  </p>
+
+  <div class="price-block reveal">
+    <div class="price-from">De R$97</div>
+    <div class="price-value">R$45,90</div>
+    <div class="price-note">ou 12× de R$4,48 • Acesso por 1 ano</div>
+  </div>
+
+  <div class="reveal">
+    <a href="https://pay.kiwify.com.br/1FHODQ2" class="btn-cta" style="font-size: 16px; padding: 20px 52px;">
+      Comprar Agora <span class="btn-arrow">→</span>
+    </a>
+    <span class="btn-note">🔒 Compra segura · Garantia de 7 dias</span>
+  </div>
+</section>
+
+<footer>
+  © 2026 Curso Marketing Digital — Todos os direitos reservados
+</footer>
+
+<script>
+  // ── TIMER ──
+  const timerEl = document.getElementById("timer");
+  let duration = 300;
+  setInterval(() => {
+    const m = String(Math.floor(duration / 60)).padStart(2, "0");
+    const s = String(duration % 60).padStart(2, "0");
+    timerEl.textContent = `${m}:${s}`;
+    if (--duration < 0) duration = 300;
+  }, 1000);
+
+  // ── SCROLL REVEAL ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add("visible"), i * 80);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll(".reveal, .proof-item, .testi-card").forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
